@@ -6,5 +6,5 @@ http.createServer((req, res) => {
     return res.end('ok');
   }
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ app: 'vessl-smoke-node', node: process.version, path: req.url }));
+  res.end(JSON.stringify({ app: 'vessl-smoke-node', release: 'auto-deploy-test', node: process.version, path: req.url }));
 }).listen(PORT, '0.0.0.0', () => console.log(`listening on ${PORT}`));
