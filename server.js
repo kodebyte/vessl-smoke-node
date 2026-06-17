@@ -1,8 +1,10 @@
 const http = require('http');
-// BROKEN ON PURPOSE: listen on wrong port (9999) so :3000 health check fails.
-// Verifies Traefik LB healthcheck keeps this canary OUT of the pool (no 502s).
-const PORT = 9999;
+const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
+  if (req.url === '/up') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    return res.end('ok');
+  }
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ app: 'vessl-smoke-node', release: 'broken' }));
-}).listen(PORT, '0.0.0.0', () => console.log(`listening on ${PORT} (wrong port)`));
+  res.end(JSON.stringify({ app: 'vessl-smoke-node', node: process.version, path: req.url }));
+}).listen(PORT, '0.0.0.0', () => console.log(`listening on ${PORT}`));
